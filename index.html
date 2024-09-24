@@ -499,7 +499,7 @@ display: none;
 </div>
 <div class="panel">
 <canvas id="visualizer"></canvas>
-<h2>Custom JS Audio Processing:</h2>
+<h2>JS Audio Processing:</h2>
 <textarea id="customCodeInput" placeholder="Enter custom JS code here. Use 'x' as the input sample variable. if you wanna use Math.JS you can use 'm' for short" spellcheck="false"></textarea>
 <div id="errorContainer" style="color: #00ff00;">Status: OK</div>
 </div>
@@ -1164,7 +1164,7 @@ display: none;
                 errorContainer.style.color = '#00ff00';
                 errorContainer.textContent = 'Status: OK ';
             } catch (error) {
-                console.error('Invalid JavaScript in Custom JS Audio Processing:', error);
+                console.error('Invalid JavaScript in JS Audio Processing:', error);
                 errorContainer.style.color = '#ff0000';
                 errorContainer.textContent = `Error: ${error.message}`;
             }
