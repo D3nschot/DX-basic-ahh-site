@@ -1832,7 +1832,6 @@ display: none;
                             const inputR = e.inputBuffer.getChannelData(1);
                             const outputL = e.outputBuffer.getChannelData(0);
                             const outputR = e.outputBuffer.getChannelData(1);
-
                             const delayTime = parseFloat(document.getElementById('flangerDelaySlider').value);
                             const depth = parseFloat(document.getElementById('flangerDepthSlider').value);
                             const feedback = parseFloat(document.getElementById('flangerFeedbackSlider').value) * 1;
@@ -2031,7 +2030,7 @@ display: none;
                         const outputR = e.outputBuffer.getChannelData(1);
                         
                         const dt = 1 / offlineContext.sampleRate;
-                        const RC = 1 / (2 * Math.PI * (m.pow(parseFloat(document.getElementById('frequencySlider').value)/20000,2)*20000));
+                        const RC = 1 / (2 * m.PI * (m.pow(parseFloat(document.getElementById('frequencySlider').value)/20000,2)*20000));
                         const alpha = dt / (RC + dt);
                         
                         for (let i = 0; i < e.inputBuffer.length; i++) {
@@ -2044,6 +2043,128 @@ display: none;
                         }
                     };
                     break;
+                case 'vibrato':
+                    const vibratoBufferSize = 4096;
+                    newFilter = offlineContext.createScriptProcessor(vibratoBufferSize, 2, 2);
+                    let vibratoPhase = 0;
+
+                    newFilter.onaudioprocess = function(e) {
+                        const inputL = e.inputBuffer.getChannelData(0);
+                        const inputR = e.inputBuffer.getChannelData(1);
+                        const outputL = e.outputBuffer.getChannelData(0);
+                        const outputR = e.outputBuffer.getChannelData(1);
+                        const frequency = parseFloat(document.getElementById('vibratoRateSlider').value);
+                        const depth = parseFloat(document.getElementById('vibratoDepthSlider').value) / 1200;
+                        const waveType = document.getElementById('vibratoWaveType').value;
+                        
+                        for (let i = 0; i < e.inputBuffer.length; i++) {
+                            let lfo;
+                            switch (waveType) {
+                                case 'sine':
+                                    lfo = m.sin(2 * m.PI * frequency * vibratoPhase);
+                                    break;
+                                case 'square':
+                                    lfo = m.sign(m.sin(2 * m.PI * frequency * vibratoPhase));
+                                    break;
+                                case 'sawtooth':
+                                    lfo = 2 * (frequency * vibratoPhase - m.floor(frequency * vibratoPhase + 0.5));
+                                    break;
+                                case 'triangle':
+                                    lfo = m.abs(2 * (frequency * vibratoPhase - m.floor(frequency * vibratoPhase + 0.5))) * 2 - 1;
+                                    break;
+                                default:
+                                    lfo = 0;
+                                    break;
+                            }
+                            vibratoPhase += 1 / offlineContext.sampleRate;
+                            if (vibratoPhase > 1) vibratoPhase -= 1;
+
+                            const speedFactor = m.pow(2, lfo * depth);
+                            const playbackRate = 1 + (speedFactor - 1) * depth;
+
+                            outputL[i] = inputL[m.floor(i / playbackRate) % inputL.length];
+                            outputR[i] = inputR[m.floor(i / playbackRate) % inputR.length];
+                        }
+                    };
+                    break;
+                case 'pitch':
+                    const pitchQuality = m.min(14, m.max(8, parseFloat(document.getElementById('pitchShiftQualitySlider').value)));
+                    const pitchBufferSize = m.pow(2, m.floor(pitchQuality));
+                    newFilter = offlineContext.createScriptProcessor(pitchBufferSize, 2, 2);
+                    let pitchBufferL = new Float32Array(pitchBufferSize);
+                    let pitchBufferR = new Float32Array(pitchBufferSize);
+                    let pitchBufferIndex = 0;
+
+                    newFilter.onaudioprocess = function(e) {
+                        const inputL = e.inputBuffer.getChannelData(0);
+                        const inputR = e.inputBuffer.getChannelData(1);
+                        const outputL = e.outputBuffer.getChannelData(0);
+                        const outputR = e.outputBuffer.getChannelData(1);
+                        const pitchShift = parseFloat(document.getElementById('pitchShiftSlider').value);
+                        
+                        for (let i = 0; i < e.inputBuffer.length; i++) {
+                            const readPos = pitchBufferIndex * m.pow(2, pitchShift / 12);
+                            const wrappedReadPos = (readPos + pitchBufferSize) % pitchBufferSize;
+                            
+                            const readIndex = m.floor(wrappedReadPos);
+                            const nextIndex = (readIndex + 1) % pitchBufferSize;
+                            const fraction = wrappedReadPos - readIndex;
+                            const firstL = pitchBufferL[readIndex];
+                            const secondL = pitchBufferL[nextIndex];
+                            const firstR = pitchBufferR[readIndex];
+                            const secondR = pitchBufferR[nextIndex];
+                            
+                            const interpolatedL = firstL + fraction * (secondL - firstL);
+                            const interpolatedR = firstR + fraction * (secondR - firstR);
+
+                            pitchBufferL[pitchBufferIndex] = inputL[i];
+                            pitchBufferR[pitchBufferIndex] = inputR[i];
+                            pitchBufferIndex = (pitchBufferIndex + 1) % pitchBufferSize;
+
+                            outputL[i] = interpolatedL;
+                            outputR[i] = interpolatedR;
+                        }
+                    };
+                    break;
+                case 'ringmod':
+                    const ringmodBufferSize = 4096;
+                    newFilter = offlineContext.createScriptProcessor(ringmodBufferSize, 2, 2);
+                    let ringmodPhase = 0;
+                    newFilter.onaudioprocess = function(e) {
+                        const inputL = e.inputBuffer.getChannelData(0);
+                        const inputR = e.inputBuffer.getChannelData(1);
+                        const outputL = e.outputBuffer.getChannelData(0);
+                        const outputR = e.outputBuffer.getChannelData(1);
+                        const frequency = parseFloat(document.getElementById('ringmodFrequencySlider').value);
+                        const depth = parseFloat(document.getElementById('ringmodDepthSlider').value);
+                        const waveType = document.getElementById('ringmodWaveType').value;
+                        
+                        for (let i = 0; i < e.inputBuffer.length; i++) {
+                            const t = i / audioContext.sampleRate;
+                            let modulator;
+                            switch (waveType) {
+                                case 'sine':
+                                    modulator = m.sin(2 * m.PI * frequency * t);
+                                    break;
+                                case 'square':
+                                    modulator = m.sign(m.sin(2 * m.PI * frequency * t));
+                                    break;
+                                case 'sawtooth':
+                                    modulator = 2 * (frequency * t - m.floor(frequency * t + 0.5));
+                                    break;
+                                case 'triangle':
+                                    modulator = m.abs(2 * (frequency * t - m.floor(frequency * t + 0.5))) * 2 - 1;
+                                    break;
+                            }
+                            
+                            const ringmod = 1 - depth + depth * modulator;
+                            
+                            outputL[i] = inputL[i] * ringmod;
+                            outputR[i] = inputR[i] * ringmod;
+                        }
+                    };
+                    break;
+                        
                 default:
                     newFilter = offlineContext.createBiquadFilter();
                     newFilter.type = filterType;
@@ -2075,7 +2196,11 @@ display: none;
                 newGain.connect(newLimiter);
             }
 
-            newLimiter.connect(offlineContext.destination);
+            if (document.getElementById('limiterToggle').checked) {
+                newLimiter.connect(offlineContext.destination);
+            } else {
+                newGain.connect(offlineContext.destination);
+            }
 
             source.start();
 
