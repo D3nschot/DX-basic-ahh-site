@@ -201,6 +201,10 @@ display: none;
 <span id="durationCounter"></span>
 <button id="visualiserType">Visualiser: Frequency Log</button>
 <button id="saveAudio">Save audio effect</button>
+<div>
+<label for="saveOffset">save offset:</label>
+<input type="range" id="saveOffset" min="-2" max="2"></input>
+</div>
 </div>
 <div id="filterControls" class="controls">
 <h2>Effect Controls</h2>
@@ -218,6 +222,8 @@ display: none;
 <option value="ringmod">Ring Modulation</option>
 <option value="vibrato">Vibrato</option>
 <option value="pitch">Pitch</option>
+<option Value="nonlinearFilter">Non-Linear filters</option>
+<option value="phaser">phaser</option>
 <option value="custom">Custom</option>
 </select>
 <div id="ringmodControls" style="display: none;">
@@ -245,7 +251,9 @@ display: none;
 <option value="square">Square</option>
 <option value="sawtooth">Sawtooth</option>
 <option value="triangle">Triangle</option>
+<option value="custom">Custom</option>
 </select>
+<textarea id="RingModcustomWaveform" placeholder="Enter custom waveform here (e.g., 'x * Math.sin(2 * Math.PI * x)')"></textarea>
 </div>
 </div>
 </div>
@@ -318,13 +326,9 @@ display: none;
 <option value="square">Square</option>
 <option value="sawtooth">Sawtooth</option>
 <option value="triangle">Triangle</option>
+<option value="custom">Custom</option>
 </select>
-</div>
-</div>
-<div class="slider-container">
-<label for="flangerNewAlgorithm">New Flanger:</label>
-<div class="slider-wrapper">
-<input type="checkbox" id="flangerNewAlgorithm">
+<textarea id="FlangercustomWaveform" placeholder="Enter custom waveform here (e.g., 'x * Math.sin(2 * Math.PI * x)')"></textarea>
 </div>
 </div>
 <div class="slider-container">
@@ -400,12 +404,6 @@ display: none;
 <div class="slider-container">
 <label for="ringmodWaveType">Wave Type:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
 <div class="slider-wrapper">
-<select id="ringmodWaveType">
-<option value="sine">Sine</option>
-<option value="square">Square</option>
-<option value="sawtooth">Sawtooth</option>
-<option value="triangle">Triangle</option>
-</select>
 </div>
 </div>
 </div>
@@ -434,7 +432,9 @@ display: none;
 <option value="square">Square</option>
 <option value="sawtooth">Sawtooth</option>
 <option value="triangle">Triangle</option>
+<option value="custom">Custom</option>
 </select>
+<textarea id="VibratocustomWaveform" placeholder="Enter custom waveform here (e.g., 'x * Math.sin(2 * Math.PI * x)')"></textarea>
 </div>
 </div>
 </div>
@@ -457,6 +457,68 @@ display: none;
 </div>
 </div>
 </div>
+<div class="nonlinFilters" style="display: none;">
+    <div class="control-group">
+        <label for="nonlinearFilterFrequencyValue">Frequency:</label>
+        <input type="range" id="nonlinearFilterFrequencyValue" min="0" max="1" step="0.001" value=".1">
+        <input type="number" id="nonlinearFilterFrequencyInput" min="0" max="1" step="0.001" value=".1">
+    </div>
+    <div class="control-group">
+        <label for="nonlinearFilterResonanceValue">Resonance:</label>
+        <input type="range" id="nonlinearFilterResonanceValue" min="0" max="1" step="0.001" value=".1">
+        <input type="number" id="nonlinearFilterResonanceInput" min="0" max="1" step="0.001" value=".1">
+    </div>
+    <div class="control-group">
+        <label for="nonlinearFilterType">Nonlinear Filter Type</label>
+        <select id="nonlinearFilterType">
+            <option value="1">Low-Pass</option>
+            <option value="2">High-Pass</option>
+            <option value="3">Band-Pass</option>
+        </select>
+    </div>
+    <div class="control-group">
+        <label for="nonlinearFilterMode">Filter Mode</label>
+        <select id="nonlinearFilterMode">
+            <option value="0">Standard (Sine-like)</option>
+            <option value="1">Clipped (Triangle-like)</option>
+            <option value="2">Positive Clipped (+Saw-like)</option>
+            <option value="3">Negative Clipped (-saw-like)</option>
+            <option value="4">Dual Filter (pulse-like)</option>
+        </select>
+    </div>
+</div>
+
+<div id="phaserControls" style="display: none;">
+<div class="control-group">
+<label for="phaserMinFrequencySlider">MinFrequency:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+<input type="range" id="phaserMinFrequencySlider" min="0" max="1" step="0.001" value=".1">
+<input type="number" id="phaserMinFrequencyInput" min="0" max="1" step="0.001" value=".1">
+</div>
+
+<div class="control-group">
+<label for="phaserMaxFrequencySlider">MaxFrequency:&nbsp;&nbsp;&nbsp;</label>
+<input type="range" id="phaserMaxFrequencySlider" min="0" max="1" step="0.001" value=".1">
+<input type="number" id="phaserMaxFrequencyInput" min="0" max="1" step="0.001" value=".1">
+</div>
+
+<div class="control-group">
+<label for="phaserFeedbackSlider">Feedback:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+<input type="range" id="phaserFeedbackSlider" min="0" max="1" step="0.001" value=".1">
+<input type="number" id="phaserFeedbackInput" min="0" max="1" step="0.001" value=".1">
+</div>
+
+<div class="control-group">
+<label for="phaserRateSlider">Rate:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+<input type="range" id="phaserRateSlider" min="0" max="100" step="0.001" value=".1">
+<input type="number" id="phaserRateInput" min="0" max="100" step="0.001" value=".1">
+</div>
+
+<div class="control-group">
+    <label for="PhaserBands">Phaser bands:</label>
+    <input type="number" id="PhaserBands" min="0" step="1" value="3">
+</div>
+</div>
+
 <div class="slider-container">
 <label for="volumeSlider">Volume:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
 <div class="slider-wrapper">
@@ -504,6 +566,79 @@ display: none;
 <div id="errorContainer" style="color: #00ff00;">Status: OK</div>
 </div>
 </div>
+<script>
+    function saveStateToURL() {
+        const params = new URLSearchParams();
+
+        // Collect all slider, input, and select values
+        document.querySelectorAll('input[type="range"], input[type="number"], select').forEach(input => {
+            params.set(input.id, input.value);
+        });
+
+        // Encode all textarea content as Base64
+        document.querySelectorAll('textarea').forEach(textarea => {
+            const base64Content = btoa(textarea.value);
+            params.set(textarea.id, base64Content);
+        });
+
+        // Update the URL without reloading the page
+        const newUrl = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+        window.history.replaceState({}, '', newUrl);
+    }
+
+    function loadStateFromURL() {
+        const params = new URLSearchParams(window.location.search);
+
+        // Ensure audioContext and gainNode are initialized
+        if (!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (!gainNode) {
+            gainNode = audioContext.createGain();
+            gainNode.connect(audioContext.destination);
+        }
+
+        // Restore all slider, input, select, and textarea values
+        params.forEach((value, key) => {
+            const input = document.getElementById(key);
+            if (input) {
+                if (input.tagName === 'TEXTAREA') {
+                    input.value = atob(value); // Decode Base64 for textareas
+                } else {
+                    input.value = value;
+                }
+                input.dispatchEvent(new Event('input'));
+            }
+        });
+
+        // Handle filterType specifically
+        const filterType = params.get('filterType');
+        if (filterType) {
+            const filterTypeSelect = document.getElementById('filterType');
+            filterTypeSelect.value = filterType;
+            filterTypeSelect.dispatchEvent(new Event('change')); // Trigger the change event to update the UI
+        }
+
+        // Update the gainNode's gain value if the volume slider is present
+        const volumeSlider = document.getElementById('volumeSlider');
+        if (volumeSlider) {
+            const volume = parseFloat(volumeSlider.value);
+            gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Attach event listeners to all sliders, inputs, selects, and textareas
+        document.querySelectorAll('input[type="range"], input[type="number"], select, textarea').forEach(input => {
+            input.addEventListener('input', saveStateToURL);
+            input.addEventListener('change', saveStateToURL);
+        });
+
+        // Load state from URL on page load
+        loadStateFromURL();
+    });
+</script>
+
 <script>
         window.onerror = function(message, source, lineno, colno, error) {
             if (message.includes("Cannot read properties of undefined (reading 'start')")) {
@@ -605,6 +740,8 @@ display: none;
             const ringmodControls = document.getElementById('ringmodControls');
             const vibratoControls = document.getElementById('vibratoControls');
             const pitchShiftControls = document.getElementById('pitchShiftControls');
+            const nonlinearFilter = document.querySelector('.nonlinFilters');
+            const phaserControls = document.getElementById('phaserControls');
 
             standardFilterControls.style.display = 'none';
             flangerControls.style.display = 'none';
@@ -615,6 +752,8 @@ display: none;
             ringmodControls.style.display = 'none';
             vibratoControls.style.display = 'none';
             pitchShiftControls.style.display = 'none';
+            nonlinearFilter.style.display = 'none';
+            phaserControls.style.display = 'none';
 
             switch (filterType) {
                 case 'flanger':
@@ -641,6 +780,12 @@ display: none;
                 case 'pitch':
                     pitchShiftControls.style.display = 'block';
                     break;
+                case 'nonlinearFilter':
+                    nonlinearFilter.style.display = 'block';
+                    break;
+                case 'phaser':
+                    phaserControls.style.display = 'block';
+                    break
                 default:
                     standardFilterControls.style.display = 'block';
             }
@@ -736,16 +881,16 @@ display: none;
 
         filterTypeSelect.addEventListener('change', (event) => {
             setupAudioGraph();
-        });
+        });   
 
         function setupAudioGraph() {
             if (!audioBuffer) {
-                warningContainer.style.display = 'block';
-                return;
+            warningContainer.style.display = 'block';
+            return;
             }
 
             if (source) {
-                source.disconnect();
+            source.disconnect();
             }
             source = audioContext.createBufferSource();
             source.buffer = audioBuffer;
@@ -754,128 +899,106 @@ display: none;
             const filterType = document.getElementById('filterType').value;
 
             switch (filterType) {
-                case 'custom':
-                    filter = audioContext.createWaveShaper();
-                    filter.curve = custom();
-                    break;
-                case 'Distortion':
-                    filter = audioContext.createWaveShaper();
-                    filter.curve = customx();
-                    break;
-                case 'flanger':
-                    const useNewAlgorithm = document.getElementById('flangerNewAlgorithm').checked;
-                    const invertFlanger = document.getElementById('flangerInvert').checked;
-                    if (useNewAlgorithm) {
-                        const flangerBufferSize = 4096*2;
-                        filter = audioContext.createScriptProcessor(flangerBufferSize, 2, 2);
-                        let delayBufferLeft = new Float32Array(flangerBufferSize).fill(0);
-                        let delayBufferRight = new Float32Array(flangerBufferSize).fill(0);
-                        let delayWritePosition = 0;
-                        let lfoPhase = 0;
+            case 'custom':
+                filter = audioContext.createWaveShaper();
+                filter.curve = custom();
+                break;
+            case 'Distortion':
+                filter = audioContext.createWaveShaper();
+                filter.curve = customx();
+                break;
+            case 'flanger':
+                const flangerBufferSize = 4096 * 2;
+                    filter = audioContext.createScriptProcessor(flangerBufferSize, 2, 2);
+                    let delayBufferLeft = new Float32Array(flangerBufferSize).fill(0);
+                    let delayBufferRight = new Float32Array(flangerBufferSize).fill(0);
+                    let delayWritePosition = 0;
+                    let lfoPhase = 0;
+                    let LFOtime = 0;
 
-                        filter.onaudioprocess = function(e) {
-                            const inputL = e.inputBuffer.getChannelData(0);
-                            const inputR = e.inputBuffer.getChannelData(1);
-                            const outputL = e.outputBuffer.getChannelData(0);
-                            const outputR = e.outputBuffer.getChannelData(1);
-                            const delayTime = parseFloat(document.getElementById('flangerDelaySlider').value);
-                            const depth = parseFloat(document.getElementById('flangerDepthSlider').value);
-                            const feedback = parseFloat(document.getElementById('flangerFeedbackSlider').value) * 1;
-                            const rate = parseFloat(document.getElementById('flangerRateSlider').value);
-                            const waveType = document.getElementById('flangerWaveType').value;
+                    filter.onaudioprocess = function (e) {
+                        const inputL = e.inputBuffer.getChannelData(0);
+                        const inputR = e.inputBuffer.getChannelData(1);
+                        const outputL = e.outputBuffer.getChannelData(0);
+                        const outputR = e.outputBuffer.getChannelData(1);
+                        const delayTime = parseFloat(document.getElementById('flangerDelaySlider').value);
+                        const depth = parseFloat(document.getElementById('flangerDepthSlider').value);
+                        const feedback = parseFloat(document.getElementById('flangerFeedbackSlider').value);
+                        const rate = parseFloat(document.getElementById('flangerRateSlider').value);
+                        const waveType = document.getElementById('flangerWaveType').value;
+                        const invertFlanger = document.getElementById('flangerInvert').checked;
 
-                            for (let i = 0; i < flangerBufferSize; i++) {
-                                let lfoValue;
-                                switch (waveType) {
-                                    case 'sine':
-                                        lfoValue = m.sin(lfoPhase);
-                                        break;
-                                    case 'square':
-                                        lfoValue = lfoPhase < m.PI ? 1 : -1;
-                                        break;
-                                    case 'sawtooth':
-                                        lfoValue = (lfoPhase / (2 * m.PI)) * 2 - 1;
-                                        break;
-                                    case 'triangle':
-                                        lfoValue = m.asin(m.sin(lfoPhase))/m.PI*2;
-                                        break;
-                                    default:
-                                        lfoValue = m.sin(lfoPhase);
-                                }
-
-                                const delayTimeSamples = m.max(0, m.min((delayTime + ((lfoValue) * depth * delayTime)) * audioContext.sampleRate, flangerBufferSize - 1));
-
-                                let delayReadPosition = delayWritePosition - delayTimeSamples;
-                                if (delayReadPosition < 0) delayReadPosition += flangerBufferSize;
-
-                                const readPosition = m.floor(delayReadPosition);
-                                const fraction = delayReadPosition - readPosition;
-
-                                const delayedSampleL = (1 - fraction) * delayBufferLeft[readPosition % flangerBufferSize] + 
-                                                    fraction * delayBufferLeft[(readPosition + 1) % flangerBufferSize];
-                                const delayedSampleR = (1 - fraction) * delayBufferRight[readPosition % flangerBufferSize] + 
-                                                    fraction * delayBufferRight[(readPosition + 1) % flangerBufferSize];
-
-                                if (invertFlanger) {
-                                    outputL[i] = inputL[i] - delayedSampleL * feedback;
-                                    outputR[i] = inputR[i] - delayedSampleR * feedback;
-                                } else {
-                                    outputL[i] = inputL[i] + delayedSampleL * feedback;
-                                    outputR[i] = inputR[i] + delayedSampleR * feedback;
-                                }
-
-                                delayBufferLeft[delayWritePosition] = inputL[i] + outputL[i] * feedback;
-                                delayBufferRight[delayWritePosition] = inputR[i] + outputR[i] * feedback;
-
-                                delayWritePosition = (delayWritePosition + 1) % flangerBufferSize;
-                                lfoPhase += 2 * m.PI * rate / audioContext.sampleRate;
-                                if (lfoPhase > 2 * m.PI) lfoPhase -= 2 * m.PI;
+                        for (let i = 0; i < e.inputBuffer.length; i++) {
+                            let lfoValue;
+                            switch (waveType) {
+                                case 'sine':
+                                    lfoValue = Math.sin(lfoPhase);
+                                    break;
+                                case 'square':
+                                    lfoValue = lfoPhase < Math.PI ? 1 : -1;
+                                    break;
+                                case 'sawtooth':
+                                    lfoValue = (lfoPhase / (2 * Math.PI)) * 2 - 1;
+                                    break;
+                                case 'triangle':
+                                    lfoValue = Math.asin(Math.sin(lfoPhase)) / Math.PI * 2;
+                                    break;
+                                case 'custom':
+                                    const customWaveform = document.getElementById('FlangercustomWaveform').value;
+                                    try {
+                                        const compiled = new Function('x', `return ${customWaveform || 'Math.sin(x)'}`);
+                                        lfoValue = compiled(lfoPhase / (2 * Math.PI)) || Math.sin(lfoPhase);
+                                    } catch (error) {
+                                        lfoValue = 0.5; // Fallback to zero if there's an error
+                                    }
+                                    break;
+                                default:
+                                    lfoValue = Math.sin(lfoPhase);
                             }
-                        };
-                    } else {
-                        filter = audioContext.createBiquadFilter();
-                        filter.type = 'allpass';
-                        filter.frequency.value = 1000;
-                        flangerDelay = audioContext.createDelay();
-                        flangerLFO = audioContext.createOscillator();
-                        flangerGain = audioContext.createGain();
-                        flangerFeedback = audioContext.createGain();
 
-                        const flangerDelayTime = parseFloat(document.getElementById('flangerDelaySlider').value);
-                        const flangerDepth = flangerDelayTime * (parseFloat(document.getElementById('flangerDepthSlider').value));
-                        const flangerRate = parseFloat(document.getElementById('flangerRateSlider').value);
-                        const flangerFeedbackAmount = parseFloat(document.getElementById('flangerFeedbackSlider').value);
-                        const flangerWaveType = document.getElementById('flangerWaveType').value;
+                            const delayTimeSamples = Math.max(
+                                0,
+                                Math.min(
+                                    (delayTime + lfoValue * depth * delayTime) * audioContext.sampleRate,
+                                    flangerBufferSize - 1
+                                )
+                            );
 
-                        flangerDelay.delayTime.value = flangerDelayTime;
-                        flangerLFO.frequency.value = flangerRate;
-                        flangerLFO.type = flangerWaveType;
-                        flangerGain.gain.value = flangerDepth;
-                        flangerFeedback.gain.value = flangerFeedbackAmount;
+                            let delayReadPosition = delayWritePosition - delayTimeSamples;
+                            if (delayReadPosition < 0) delayReadPosition += flangerBufferSize;
 
-                        flangerLFO.connect(flangerGain);
-                        flangerGain.connect(flangerDelay.delayTime);
+                            const readPosition = Math.floor(delayReadPosition);
+                            const fraction = delayReadPosition - readPosition;
 
-                        source.connect(flangerDelay);
-                        flangerDelay.connect(flangerFeedback);
-                        flangerFeedback.connect(flangerDelay);
+                            const delayedSampleL =
+                                (1 - fraction) * delayBufferLeft[readPosition % flangerBufferSize] +
+                                fraction * delayBufferLeft[(readPosition + 1) % flangerBufferSize];
+                            const delayedSampleR =
+                                (1 - fraction) * delayBufferRight[readPosition % flangerBufferSize] +
+                                fraction * delayBufferRight[(readPosition + 1) % flangerBufferSize];
 
-                        flangerLFO.start();
+                            if (invertFlanger) {
+                                outputL[i] = inputL[i] - delayedSampleL * feedback;
+                                outputR[i] = inputR[i] - delayedSampleR * feedback;
+                            } else {
+                                outputL[i] = inputL[i] + delayedSampleL * feedback;
+                                outputR[i] = inputR[i] + delayedSampleR * feedback;
+                            }
 
-                        if (invertFlanger) {
-                            const invertedGain = audioContext.createGain();
-                            invertedGain.gain.value = -1;
-                            flangerDelay.connect(invertedGain);
+                            delayBufferLeft[delayWritePosition] = inputL[i] + outputL[i] * feedback;
+                            delayBufferRight[delayWritePosition] = inputR[i] + outputR[i] * feedback;
 
-                            const sumGain = audioContext.createGain();
-                            source.connect(sumGain);
-                            invertedGain.connect(sumGain);
+                            delayWritePosition = (delayWritePosition + 1) % flangerBufferSize;
+                            lfoPhase += (2 * Math.PI * rate) / audioContext.sampleRate;
 
-                            filter = sumGain;
-                        } else {
-                            filter = flangerDelay;
+                            LFOtime += 1 / audioContext.sampleRate;
+                            if (lfoPhase > 2 * Math.PI) lfoPhase -= 2 * Math.PI;
+                            if (LFOtime > audioBuffer.duration) {
+                                lfoPhase = 0;
+                                LFOtime = 0;
+                            }
                         }
-                    }
+                    };
                     break;
                 case 'convolver':
                     filter = audioContext.createConvolver();
@@ -1016,6 +1139,15 @@ display: none;
                                 case 'triangle':
                                     modulator = Math.abs(2 * (frequency * t - Math.floor(frequency * t + 0.5))) * 2 - 1;
                                     break;
+                                case 'custom':
+                                    const customWaveform = document.getElementById('RingmodCustomWaveform').value;
+                                    try {
+                                        modulator = eval(customWaveform.replace(/x/g, (t * frequency * 2 * Math.PI)));
+                                    } catch (error) {
+                                        console.error('Error evaluating custom waveform:', error);
+                                        modulator = 0; // Fallback to zero if there's an error
+                                    }
+                                    break;
                             }
                             
                             const ringmod = 1 - depth + depth * modulator;
@@ -1055,6 +1187,15 @@ display: none;
                                 case 'triangle':
                                     lfo = Math.abs(2 * (frequency * vibratoPhase - Math.floor(frequency * vibratoPhase + 0.5))) * 2 - 1;
                                     break;
+                                case 'custom':
+                                    const customWaveform = document.getElementById('VibratoCustomWaveform').value;
+                                    try {
+                                        lfo = eval(customWaveform.replace(/x/g, (vibratoPhase * frequency * 2 * Math.PI)));
+                                    } catch (error) {
+                                        console.error('Error evaluating custom waveform:', error);
+                                        lfo = 0; // Fallback to zero if there's an error
+                                    }
+                                    break;
                                 default:
                                     lfo = 0;
                                     break;
@@ -1077,6 +1218,8 @@ display: none;
                     let pitchBufferL = new Float32Array(pitchBufferSize);
                     let pitchBufferR = new Float32Array(pitchBufferSize);
                     let pitchBufferIndex = 0;
+
+                    
 
                     filter.onaudioprocess = function(e) {
                         const inputL = e.inputBuffer.getChannelData(0);
@@ -1114,6 +1257,163 @@ display: none;
                         }
                     };
                     break;
+                    case 'nonlinearFilter':
+                        function createNonlinearFilterProcessor() {
+                        const stateL = { pi: 0, p1: 0, p2: 0, p3: 0, p4: 0 };
+                        const stateR = { pi: 0, p1: 0, p2: 0, p3: 0, p4: 0 };
+
+                        function processChannel(input, output, cutoff, resonance, mode, state, filterType) {
+                            const fr = Math.min(Math.max(cutoff, 0), 0.99);
+                            for (let i = 0; i < input.length; i++) {
+                                const ff = input[i];
+                                let filterOut = ff;
+
+                                let f = ff;
+                                if (filterType == 3) {
+                                    state[call].pi += ff - state[call].pi * cutoff;
+                                    f = ff - state[call].pi;
+                                }
+
+                                switch (mode) {
+                                    case 0:
+                                        state[call].p1 += state[call].p2 += ((f - state[call].p1) * fr * fr - state[call].p2 * (1 - resonance));
+                                        filterOut = state[call].p1;
+                                        break;
+                                    case 1:
+                                        state[call].p1 += Math.max(Math.min(state[call].p2 += (f - state[call].p1 - state[call].p2 * (1 - resonance)), fr * fr), -fr * fr);
+                                        filterOut = state[call].p1;
+                                        break;
+                                    case 2:
+                                        state[call].p1 += Math.min(state[call].p2 += (f - state[call].p1 - state[call].p2 * (1 - resonance)), fr * fr);
+                                        filterOut = state[call].p1;
+                                        break;
+                                    case 3:
+                                        state[call].p1 += Math.max(state[call].p2 += (f - state[call].p1 - state[call].p2 * (1 - resonance)), -fr * fr);
+                                        filterOut = state[call].p1;
+                                        break;
+                                    case 4:
+                                        state[call].p1 += Math.max(state[call].p2 += (f - state[call].p1 - state[call].p2 * (1 - resonance)), -fr * fr);
+                                        state[call].p3 += Math.min(state[call].p4 += (f - state[call].p3 - state[call].p4 * (1 - resonance)), fr * fr);
+                                        filterOut = (state[call].p1 + state[call].p3) / 2;
+                                        break;
+                                }
+
+                                if (filterType == 2) {
+                                    output[i] = ff - filterOut;
+                                } else {
+                                    output[i] = filterOut;
+                                }
+                            }
+                        }
+
+                        return function nonlinearFilterProcessor(e) {
+                            const inputL = e.inputBuffer.getChannelData(0);
+                            const inputR = e.inputBuffer.getChannelData(1);
+                            const outputL = e.outputBuffer.getChannelData(0);
+                            const outputR = e.outputBuffer.getChannelData(1);
+
+                            const cutoff = parseFloat(document.getElementById('nonlinearFilterFrequencyValue').value);
+                            const resonance = parseFloat(document.getElementById('nonlinearFilterResonanceValue').value);
+                            const mode = parseInt(document.getElementById('nonlinearFilterMode').value, 10);
+                            const filterType = document.getElementById('nonlinearFilterType').value;
+
+                            processChannel(inputL, outputL, cutoff, resonance, mode, stateL, filterType);
+                            processChannel(inputR, outputR, cutoff, resonance, mode, stateR, filterType);
+                        };
+                    }
+
+                    // Usage
+                    const nonlinearBufferSize = 4096;
+                    filter = audioContext.createScriptProcessor(nonlinearBufferSize, 2, 2);
+                    filter.onaudioprocess = createNonlinearFilterProcessor();
+                break;
+                    case 'phaser':
+                    function createPhaserProcessor() {
+                        const PhaserStateL = [{ pi: 0, p1: 0, p2: 0, p3: 0, p4: 0, j: 0, j_: 0 }];
+                        const PhaserStateR = [{ pi: 0, p1: 0, p2: 0, p3: 0, p4: 0, j: 0, j_: 0 }];
+                        const LFO = { lfoPhase: 0, time: 0 };
+
+                        function ap2(input, ag = 0, pol = 1, state, call) {
+                            if (!state[call]) {
+                                state[call] = { p1: 0, p2: 0, p3: 0, p4: 0 }; // Ensure state[call] exists
+                            }
+
+                            const s = state[call];
+                            const a = Math.max(Math.min(ag, 0.99999), 0);
+
+                            // First all-pass
+                            const y1 = -a * input + s.p1 + a * s.p2;
+                            s.p1 = input;
+                            s.p2 = y1;
+
+                            // Second all-pass
+                            const y2 = -a * y1 + s.p3 + a * s.p4;
+                            s.p3 = y1;
+                            s.p4 = y2;
+
+                            return [y1, y2][pol];
+                        }
+
+                        function processChannel(input, output, cutoffMin, cutoffMax, resonance, mode, state, LFO, bands) {
+                            const lfoRate = parseFloat(document.getElementById('phaserRateSlider').value);
+                            const lfoDepth = cutoffMax - cutoffMin;
+
+                            for (let i = 0; i < input.length; i++) {
+                                const ff = input[i];
+                                let filterOut = ff;
+
+                                // LFO modulation
+                                const lfoValue = Math.acos(-Math.sin(2 * Math.PI * LFO.lfoPhase)) / Math.PI;
+                                const cutoff = cutoffMin + lfoValue * lfoDepth;
+
+                                // Ensure state[0] exists and has required fields
+                                if (!state[0]) {
+                                    state[0] = { j: 0, j_: 0 }; // Initialize state[0] if undefined
+                                }
+
+                                const s = state[0];
+                                s.j_ = ff;
+                                s.j = s.j_ + s.j * (mode & 1 ? -resonance : resonance);
+
+                                const iterations = bands;
+                                for (let j = 1; j <= iterations; j++) {
+                                    s.j = ap2(s.j, 1 - cutoff ** 2, 1, state, j);
+                                }
+
+                                filterOut = (s.j_ + s.j) / 2;
+
+                                output[i] = filterOut;
+
+                                // Update LFO phase
+                                LFO.lfoPhase += lfoRate / audioContext.sampleRate;
+                                LFO.time += 1 / audioBuffer.duration
+                                if (LFO.lfoPhase > 1) LFO.lfoPhase -= 1;
+                            }
+                        }
+
+                        return function phaserProcessor(e) {
+                            const inputL = e.inputBuffer.getChannelData(0);
+                            const inputR = e.inputBuffer.getChannelData(1);
+                            const outputL = e.outputBuffer.getChannelData(0);
+                            const outputR = e.outputBuffer.getChannelData(1);
+
+                            const cutoffMin = parseFloat(document.getElementById('phaserMinFrequencySlider').value);
+                            const cutoffMax = parseFloat(document.getElementById('phaserMaxFrequencySlider').value);
+                            const resonance = parseFloat(document.getElementById('phaserFeedbackSlider').value);
+                            const PhaserBands = parseFloat( document.getElementById('PhaserBands').value)
+
+                            // Process left and right channels
+                            processChannel(inputL, outputL, cutoffMin, cutoffMax, resonance, 0, PhaserStateL, LFO, PhaserBands);
+                            processChannel(inputR, outputR, cutoffMin, cutoffMax, resonance, 0, PhaserStateR, LFO, PhaserBands);
+                        };
+                    }
+
+                    // Usage
+                    const PhaserBufferSize = 4096;
+                    filter = audioContext.createScriptProcessor(PhaserBufferSize, 2, 2);
+                    filter.onaudioprocess = createPhaserProcessor();
+                        break;
+                        
                 default:
                     filter = audioContext.createBiquadFilter();
                     filter.type = filterType;
@@ -1201,15 +1501,21 @@ display: none;
             }
             return curve;
         }
-    document.addEventListener('DOMContentLoaded', function() {
-        function addSafeEventListener(id, event, handler) {
-            const element = document.getElementById(id);
-            if (element) {
-                element.addEventListener(event, handler);
-            } else {
-                console.warn(`Element with id '${id}' not found`);
-            }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            function addSafeEventListener(id, event, handler) {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener(event, handler);
+                } else {
+                    console.warn(`Element with id '${id}' not found`);
+                }
         }
+
+        /*document.getElementById('FlangercustomWaveform').addEventListener('input', (event) => {
+            const expression = event.target.value;
+            compileCustomWaveform(expression);
+        });*/
 
         let audioContext;
         let gainNode;
@@ -1273,6 +1579,47 @@ display: none;
         addSafeEventListener('pitchShiftInput', 'input', updatePitchShift);
         addSafeEventListener('pitchShiftQualitySlider', 'input', updatePitchShiftQuality);
         addSafeEventListener('pitchShiftQualityInput', 'input', updatePitchShiftQuality);
+        addSafeEventListener('phaserRateSlider', 'input', updatePhaserRate);
+        addSafeEventListener('phaserRateInput', 'input', updatePhaserRate); 
+        addSafeEventListener('phaserMinFrequencySlider', 'input', updatePhaserMinFrequency);
+        addSafeEventListener('phaserMinFrequencyInput', 'input', updatePhaserMinFrequency);
+        addSafeEventListener('phaserMaxFrequencySlider', 'input', updatePhaserMaxFrequency);
+        addSafeEventListener('phaserMaxFrequencyInput', 'input', updatePhaserMaxFrequency);
+        addSafeEventListener('phaserFeedbackSlider', 'input', updatePhaserFeedback);
+        addSafeEventListener('phaserFeedbackInput', 'input', updatePhaserFeedback);
+        addSafeEventListener('PhaserBands', 'input', updateFilter);
+
+        function updatePhaserRate(event) {
+            const value = event.target.value;
+            document.getElementById('phaserRateSlider').value = value;
+            document.getElementById('phaserRateInput').value = value;
+            //document.getElementById('phaserRateValue').textContent = value + ' Hz';
+            updateFilter();
+        }
+
+        function updatePhaserMinFrequency(event) {
+            const value = event.target.value;
+            document.getElementById('phaserMinFrequencySlider').value = value;
+            document.getElementById('phaserMinFrequencyInput').value = value;
+            //document.getElementById('phaserMinFrequencyValue').textContent = value + ' Hz';
+            updateFilter();
+        }
+
+        function updatePhaserMaxFrequency(event) {
+            const value = event.target.value;
+            document.getElementById('phaserMaxFrequencySlider').value = value;
+            document.getElementById('phaserMaxFrequencyInput').value = value;
+            //document.getElementById('phaserMaxFrequencyValue').textContent = value + ' Hz';
+            updateFilter();
+        }
+
+        function updatePhaserFeedback(event) {
+            const value = event.target.value;
+            document.getElementById('phaserFeedbackSlider').value = value;
+            document.getElementById('phaserFeedbackInput').value = value;
+            //document.getElementById('phaserFeedbackValue').textContent = value + ' dB';
+            updateFilter();
+        }
 
         function updatePitchShift(event) {
             const value = event.target.value;
@@ -1348,14 +1695,18 @@ display: none;
 
         function updateVolume(event) {
             const volume = parseFloat(event.target.value);
-            updateSliderAndInput('volume', volume, '%', () => {
-                if (!audioContext) {
-                    initAudio();
-                }
-                if (gainNode) {
-                    gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
-                }
-            });
+
+            // Ensure audioContext and gainNode are initialized
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (!gainNode) {
+                gainNode = audioContext.createGain();
+                gainNode.connect(audioContext.destination);
+            }
+
+            // Update gain value
+            gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
             document.getElementById('volumeValue').textContent = `${(volume * 100).toFixed(0)}%`;
         }
 
@@ -1440,13 +1791,12 @@ display: none;
                 case 'bitcrusher':
                     const bitcrusherBits = parseInt(document.getElementById('bitcrusherBitsSlider').value);
                     const bitcrusherNormfreq = parseFloat(document.getElementById('bitcrusherNormfreqSlider').value);
-                    break;
                 case 'flanger':
-                    flangerDelay.delayTime.value = parseFloat(document.getElementById('flangerDelaySlider').value);
-                    flangerLFO.frequency.value = parseFloat(document.getElementById('flangerRateSlider').value);
-                    flangerLFO.type = document.getElementById('flangerWaveType').value;
-                    flangerGain.gain.value = parseFloat(document.getElementById('flangerDelaySlider').value) * (parseFloat(document.getElementById('flangerDepthSlider').value));
-                    flangerFeedback.gain.value = parseFloat(document.getElementById('flangerFeedbackSlider').value);
+                    const depth = parseFloat(document.getElementById('flangerDepthSlider').value);
+                    const feedback = parseFloat(document.getElementById('flangerFeedbackSlider').value);
+                    const rate = parseFloat(document.getElementById('flangerRateSlider').value);
+                    const waveType = document.getElementById('flangerWaveType').value;
+                    const invertFlanger = document.getElementById('flangerInvert').checked;
                     break;
                 case 'Distortion':
                     filter.curve = customx();
@@ -1456,6 +1806,27 @@ display: none;
                     const ringmodDepth = parseFloat(document.getElementById('ringmodDepthSlider').value);
                     const ringmodWaveType = document.getElementById('ringmodWaveType').value;
                     break;
+                case 'vibrato':
+                    const vibratoRate = parseFloat(document.getElementById('vibratoRateSlider').value);
+                    const vibratoDepth = parseFloat(document.getElementById('vibratoDepthSlider').value);
+                    const vibratoWaveType = document.getElementById('vibratoWaveType').value;
+                    break;
+                case 'pitch':
+                    const pitchShift = parseFloat(document.getElementById('pitchShiftSlider').value);
+                    const pitchQuality = Math.min(14, Math.max(8, parseFloat(document.getElementById('pitchShiftQualitySlider').value)));
+                    break;
+                case 'nonlinearFilter':
+                    const nonlinearFilterType = document.getElementById('nonlinearFilterType').value;
+                    const nonlinearFilterCutoff = parseFloat(document.getElementById('nonlinearFilterFrequencyValue').value);
+                    const nonlinearFilterResonance = parseFloat(document.getElementById('nonlinearFilterResonanceValue').value);
+                    const nonlinearFilterMode = parseInt(document.getElementById('nonlinearFilterMode').value, 10);
+                    break;
+                case 'phaser':
+                    const phaserMinFrequency = parseFloat(document.getElementById('phaserMinFrequencySlider').value);
+                    const phaserMaxFrequency = parseFloat(document.getElementById('phaserMaxFrequencySlider').value);
+                    const phaserFeedback = parseFloat(document.getElementById('phaserFeedbackSlider').value);
+                    const phaserRate = parseFloat(document.getElementById('phaserRateSlider').value);
+                    break;
                 default:
                     if (filter instanceof BiquadFilterNode) {
                         filter.frequency.value = parseFloat(document.getElementById('frequencySlider').value);
@@ -1463,6 +1834,7 @@ display: none;
                     }
             }
         }
+        
         function updateVolume() {
             const volume = parseFloat(document.getElementById('volumeSlider').value);
             gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
@@ -1564,8 +1936,6 @@ display: none;
             }
         });
 
-        
-
         document.getElementById('convolverDurationSlider').addEventListener('input', (event) => {
             document.getElementById('convolverDurationValue').textContent = `${event.target.value} s`;
             updateFilter();
@@ -1641,6 +2011,33 @@ display: none;
         });
 
         document.getElementById('flangerWaveType').addEventListener('change', updateFilter);
+
+        document.getElementById('nonlinearFilterFrequencyValue').addEventListener('input', (event) => {
+            const value = event.target.value;
+            document.getElementById('nonlinearFilterFrequencyInput').value = value;
+            updateFilter(); // Update audio processing
+        });
+
+        document.getElementById('nonlinearFilterFrequencyInput').addEventListener('input', (event) => {
+            const value = event.target.value;
+            document.getElementById('nonlinearFilterFrequencyValue').value = value;
+            updateFilter(); // Update audio processing
+        });
+
+        document.getElementById('nonlinearFilterResonanceValue').addEventListener('input', (event) => {
+            const value = event.target.value;
+            document.getElementById('nonlinearFilterResonanceInput').value = value;
+            updateFilter(); // Update audio processing
+        });
+
+        document.getElementById('nonlinearFilterResonanceInput').addEventListener('input', (event) => {
+            const value = event.target.value;
+            document.getElementById('nonlinearFilterResonanceValue').value = value;
+            updateFilter(); // Update audio processing
+        });
+
+        document.getElementById('nonlinearFilterType').addEventListener('change', updateFilter);
+        document.getElementById('nonlinearFilterMode').addEventListener('change', updateFilter);
 
         function updateDuration() {
             durationInterval = setInterval(() => {
@@ -1817,119 +2214,89 @@ display: none;
                     newFilter.curve = customx();
                     break;
                 case 'flanger':
-                    const useNewAlgorithm = document.getElementById('flangerNewAlgorithm').checked;
-                    const invertFlanger = document.getElementById('flangerInvert').checked;
-                    if (useNewAlgorithm) {
-                        const flangerBufferSize = 4096*2;
-                        newFilter = offlineContext.createScriptProcessor(flangerBufferSize, 2, 2);
-                        let delayBufferLeft = new Float32Array(flangerBufferSize).fill(0);
-                        let delayBufferRight = new Float32Array(flangerBufferSize).fill(0);
-                        let delayWritePosition = 0;
-                        let lfoPhase = 0;
+                    const flangerBufferSize = 4096 * 2;
+                    newFilter = offlineContext.createScriptProcessor(flangerBufferSize, 2, 2);
+                    let delayBufferLeft = new Float32Array(flangerBufferSize).fill(0);
+                    let delayBufferRight = new Float32Array(flangerBufferSize).fill(0);
+                    let delayWritePosition = 0;
+                    let lfoPhase = 0;
+                    let LFOtime = 0;
 
-                        newFilter.onaudioprocess = function(e) {
-                            const inputL = e.inputBuffer.getChannelData(0);
-                            const inputR = e.inputBuffer.getChannelData(1);
-                            const outputL = e.outputBuffer.getChannelData(0);
-                            const outputR = e.outputBuffer.getChannelData(1);
-                            const delayTime = parseFloat(document.getElementById('flangerDelaySlider').value);
-                            const depth = parseFloat(document.getElementById('flangerDepthSlider').value);
-                            const feedback = parseFloat(document.getElementById('flangerFeedbackSlider').value) * 1;
-                            const rate = parseFloat(document.getElementById('flangerRateSlider').value);
-                            const waveType = document.getElementById('flangerWaveType').value;
+                    newFilter.onaudioprocess = function (e) {
+                        const inputL = e.inputBuffer.getChannelData(0);
+                        const inputR = e.inputBuffer.getChannelData(1);
+                        const outputL = e.outputBuffer.getChannelData(0);
+                        const outputR = e.outputBuffer.getChannelData(1);
+                        const delayTime = parseFloat(document.getElementById('flangerDelaySlider').value);
+                        const depth = parseFloat(document.getElementById('flangerDepthSlider').value);
+                        const feedback = parseFloat(document.getElementById('flangerFeedbackSlider').value);
+                        const rate = parseFloat(document.getElementById('flangerRateSlider').value);
+                        const waveType = document.getElementById('flangerWaveType').value;
+                        const invertFlanger = document.getElementById('flangerInvert').checked;
 
-                            for (let i = 0; i < flangerBufferSize; i++) {
-                                let lfoValue;
-                                switch (waveType) {
-                                    case 'sine':
-                                        lfoValue = m.sin(lfoPhase);
-                                        break;
-                                    case 'square':
-                                        lfoValue = lfoPhase < m.PI ? 1 : -1;
-                                        break;
-                                    case 'sawtooth':
-                                        lfoValue = (lfoPhase / (2 * m.PI)) * 2 - 1;
-                                        break;
-                                    case 'triangle':
-                                        lfoValue = m.asin(m.sin(lfoPhase))/m.PI*2;
-                                        break;
-                                    default:
-                                        lfoValue = m.sin(lfoPhase);
-                                }
-
-                                const delayTimeSamples = m.max(0, m.min((delayTime + ((lfoValue) * depth * delayTime)) * offlineContext.sampleRate, flangerBufferSize - 1));
-
-                                let delayReadPosition = delayWritePosition - delayTimeSamples;
-                                if (delayReadPosition < 0) delayReadPosition += flangerBufferSize;
-
-                                const readPosition = m.floor(delayReadPosition);
-                                const fraction = delayReadPosition - readPosition;
-
-                                const delayedSampleL = (1 - fraction) * delayBufferLeft[readPosition % flangerBufferSize] + 
-                                    fraction * delayBufferLeft[(readPosition + 1) % flangerBufferSize];
-                                const delayedSampleR = (1 - fraction) * delayBufferRight[readPosition % flangerBufferSize] + 
-                                    fraction * delayBufferRight[(readPosition + 1) % flangerBufferSize];
-
-                                if (invertFlanger) {
-                                    outputL[i] = inputL[i] - delayedSampleL * feedback;
-                                    outputR[i] = inputR[i] - delayedSampleR * feedback;
-                                } else {
-                                    outputL[i] = inputL[i] + delayedSampleL * feedback;
-                                    outputR[i] = inputR[i] + delayedSampleR * feedback;
-                                }
-
-                                delayBufferLeft[delayWritePosition] = inputL[i] + outputL[i] * feedback;
-                                delayBufferRight[delayWritePosition] = inputR[i] + outputR[i] * feedback;
-
-                                delayWritePosition = (delayWritePosition + 1) % flangerBufferSize;
-                                lfoPhase += 2 * m.PI * rate / offlineContext.sampleRate;
-                                if (lfoPhase > 2 * m.PI) lfoPhase -= 2 * m.PI;
+                        for (let i = 0; i < e.inputBuffer.length; i++) {
+                            let lfoValue;
+                            switch (waveType) {
+                                case 'sine':
+                                    lfoValue = Math.sin(lfoPhase);
+                                    break;
+                                case 'square':
+                                    lfoValue = lfoPhase < Math.PI ? 1 : -1;
+                                    break;
+                                case 'sawtooth':
+                                    lfoValue = (lfoPhase / Math.PI) * 2 - 1;
+                                    break;
+                                case 'triangle':
+                                    lfoValue = Math.asin(Math.sin(lfoPhase)) / Math.PI * 2;
+                                    break;
+                                case 'custom':
+                                    const customWaveform = document.getElementById('FlangercustomWaveform').value;
+                                    try {
+                                        const compiled = new Function('x', `return ${customWaveform || 'Math.sin(x)'}`);
+                                        lfoValue = compiled(lfoPhase / (2 * Math.PI)) || Math.sin(lfoPhase);
+                                    } catch (error) {
+                                        lfoValue = 0.5; // Fallback to zero if there's an error
+                                    }
+                                    break;
+                                default:
+                                    lfoValue = Math.sin(lfoPhase);
                             }
-                        };
-                    } else {
-                        newFilter = offlineContext.createBiquadFilter();
-                        newFilter.type = 'allpass';
-                        newFilter.frequency.value = 1000;
-                        const flangerDelay = offlineContext.createDelay();
-                        const flangerLFO = offlineContext.createOscillator();
-                        const flangerGain = offlineContext.createGain();
-                        const flangerFeedback = offlineContext.createGain();
 
-                        const flangerDelayTime = parseFloat(document.getElementById('flangerDelaySlider').value);
-                        const flangerDepth = flangerDelayTime * (parseFloat(document.getElementById('flangerDepthSlider').value));
-                        const flangerRate = parseFloat(document.getElementById('flangerRateSlider').value);
-                        const flangerFeedbackAmount = parseFloat(document.getElementById('flangerFeedbackSlider').value);
-                        const flangerWaveType = document.getElementById('flangerWaveType').value;
+                            const delayTimeSamples = Math.max(0, Math.min((delayTime + (lfoValue * depth * delayTime)) * offlineContext.sampleRate, flangerBufferSize - 1));
 
-                        flangerDelay.delayTime.value = flangerDelayTime;
-                        flangerLFO.frequency.value = flangerRate;
-                        flangerLFO.type = flangerWaveType;
-                        flangerGain.gain.value = flangerDepth;
-                        flangerFeedback.gain.value = flangerFeedbackAmount;
+                            let delayReadPosition = delayWritePosition - delayTimeSamples;
+                            if (delayReadPosition < 0) delayReadPosition += flangerBufferSize;
 
-                        flangerLFO.connect(flangerGain);
-                        flangerGain.connect(flangerDelay.delayTime);
+                            const readPosition = Math.floor(delayReadPosition);
+                            const fraction = delayReadPosition - readPosition;
 
-                        source.connect(flangerDelay);
-                        flangerDelay.connect(flangerFeedback);
-                        flangerFeedback.connect(flangerDelay);
+                            const delayedSampleL = (1 - fraction) * delayBufferLeft[readPosition % flangerBufferSize] +
+                                fraction * delayBufferLeft[(readPosition + 1) % flangerBufferSize];
+                            const delayedSampleR = (1 - fraction) * delayBufferRight[readPosition % flangerBufferSize] +
+                                fraction * delayBufferRight[(readPosition + 1) % flangerBufferSize];
 
-                        flangerLFO.start();
+                            if (invertFlanger) {
+                                outputL[i] = inputL[i] - delayedSampleL * feedback;
+                                outputR[i] = inputR[i] - delayedSampleR * feedback;
+                            } else {
+                                outputL[i] = inputL[i] + delayedSampleL * feedback;
+                                outputR[i] = inputR[i] + delayedSampleR * feedback;
+                            }
 
-                        if (invertFlanger) {
-                            const invertedGain = offlineContext.createGain();
-                            invertedGain.gain.value = -1;
-                            flangerDelay.connect(invertedGain);
+                            delayBufferLeft[delayWritePosition] = inputL[i] + outputL[i] * feedback;
+                            delayBufferRight[delayWritePosition] = inputR[i] + outputR[i] * feedback;
 
-                            const sumGain = offlineContext.createGain();
-                            source.connect(sumGain);
-                            invertedGain.connect(sumGain);
+                            delayWritePosition = (delayWritePosition + 1) % flangerBufferSize;
+                            lfoPhase += 2 * Math.PI * rate / offlineContext.sampleRate;
 
-                            newFilter = sumGain;
-                        } else {
-                            newFilter = flangerDelay;
+                            LFOtime += 1 / offlineContext.sampleRate;
+                            if (lfoPhase > 2 * Math.PI) lfoPhase -= 2 * Math.PI;
+                            if (LFOtime > audioBuffer.duration) {
+                                lfoPhase = 0;
+                                LFOtime = 0;
+                            }
                         }
-                    }
+                    };
                     break;
                 case 'convolver':
                     newFilter = offlineContext.createConvolver();
@@ -2164,7 +2531,77 @@ display: none;
                         }
                     };
                     break;
-                        
+                case 'nonlinearFilter':
+                    const nonlinearBufferSize = 4096;
+                    newFilter = offlineContext.createScriptProcessor(nonlinearBufferSize, 2, 2);
+
+                    // State variables for left and right channels
+                    const stateL = { pi: 0, p1: 0, p2: 0, p3: 0, p4: 0 };
+                    const stateR = { pi: 0, p1: 0, p2: 0, p3: 0, p4: 0 };
+
+                    // Function to process a single channel
+                    function processChannel(input, output, cutoff, resonance, mode, state, filterType) {
+                        const fr = Math.min(Math.max(cutoff, 0), 0.99);
+                        for (let i = 0; i < input.length; i++) {
+                            const ff = input[i];
+                            let filterOut = ff; // Default case for error in filter type
+                            
+                            // Input for bandpass filter
+                            let f = ff;
+                            if (filterType == 3) {
+                                state[call].pi += ff - state[call].pi * cutoff;
+                                f = ff - state[call].pi;
+                            }
+
+                            switch (mode) {
+                                case 0:
+                                    state[call].p1 += state[call].p2 += ((f - state[call].p1) * fr * fr - state[call].p2 * (1 - resonance));
+                                    filterOut = state[call].p1;
+                                    break;
+                                case 1:
+                                    state[call].p1 += Math.max(Math.min(state[call].p2 += (f - state[call].p1 - state[call].p2 * (1 - resonance)), fr * fr), -fr * fr);
+                                    filterOut = state[call].p1;
+                                    break;
+                                case 2:
+                                    state[call].p1 += Math.min(state[call].p2 += (f - state[call].p1 - state[call].p2 * (1 - resonance)), fr * fr);
+                                    filterOut = state[call].p1;
+                                    break;
+                                case 3:
+                                    state[call].p1 += Math.max(state[call].p2 += (f - state[call].p1 - state[call].p2 * (1 - resonance)), -fr * fr);
+                                    filterOut = state[call].p1;
+                                    break;
+                                case 4:
+                                    state[call].p1 += Math.max(state[call].p2 += (f - state[call].p1 - state[call].p2 * (1 - resonance)), -fr * fr);
+                                    state[call].p3 += Math.min(state[call].p4 += (f - state[call].p3 - state[call].p4 * (1 - resonance)), fr * fr);
+                                    filterOut = (state[call].p1 + state[call].p3) / 2;
+                                    break;
+                            }
+
+                            // Output for highpass filter and lowpass filter
+                            if (filterType == 2) {
+                                output[i] = ff - filterOut;
+                            } else {
+                                output[i] = filterOut;
+                            }
+                        }
+                    }
+
+                    newFilter.onaudioprocess = function (e) {
+                        const inputL = e.inputBuffer.getChannelData(0);
+                        const inputR = e.inputBuffer.getChannelData(1);
+                        const outputL = e.outputBuffer.getChannelData(0);
+                        const outputR = e.outputBuffer.getChannelData(1);
+
+                        const cutoff = parseFloat(document.getElementById('nonlinearFilterFrequencyValue').value);
+                        const resonance = parseFloat(document.getElementById('nonlinearFilterResonanceValue').value);
+                        const mode = parseInt(document.getElementById('nonlinearFilterMode').value, 10);
+                        const filterType = document.getElementById('nonlinearFilterType').value;
+
+                        // Process left and right channels
+                        processChannel(inputL, outputL, cutoff, resonance, mode, stateL, filterType);
+                        processChannel(inputR, outputR, cutoff, resonance, mode, stateR, filterType);
+                    };
+                    break;        
                 default:
                     newFilter = offlineContext.createBiquadFilter();
                     newFilter.type = filterType;
